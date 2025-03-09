@@ -1,9 +1,9 @@
 import { fabric } from "fabric"
 import { useEffect, useRef } from "react"
 import { LineTool } from "../render/lineTool"
-import { Tool } from "../toll"
+// import { Tool } from "../toll"
 export const useRender = (id: string) => {
-    // const lineToolrf = useRef<LineTool | null>(null)
+    const tool = useRef<LineTool | null>(null)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const init = () => {
     const target = document.getElementById(id) as HTMLCanvasElement
@@ -13,14 +13,13 @@ export const useRender = (id: string) => {
       height: target.parentElement?.clientHeight,
       selection: false,
     })
-    const tool = new Tool(canvas)
-    tool.init()
+    tool.current = new LineTool(canvas)
   }
 
   useEffect(() => {
     init()
     return () => {
-      // tool.destroy()
+      tool.current?.destroy()
     }
   }, [init])
 }

@@ -1,4 +1,5 @@
 import { fabric } from "fabric"
+import PolygonControl from "./package/PolygonControl"
 export class Tool {
   constructor(private canvas: fabric.Canvas) {
     this.canvas = canvas
@@ -6,7 +7,7 @@ export class Tool {
 
 
   init = () => {
-    const Polygon = new fabric.Polygon([
+    const polygonControl = new PolygonControl([
       { x: 0, y: 0 },
       { x: 100, y: 0 },
       { x: 100, y: 100 },
@@ -17,7 +18,7 @@ export class Tool {
       selectable: false,
       fill: '',
     })
-    this.canvas.add(Polygon)
+    this.canvas.add(polygonControl)
   }
   
 }

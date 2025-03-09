@@ -1,49 +1,54 @@
+import hotkeys from 'hotkeys-js';
 import { fabric } from "fabric"
 import { View } from "./view"
-import { Pushed } from "./pushed"
 import { Stash } from "./stash"
-import { Pointer, StashPointer } from "./types"
+import { Pointer } from "./types"
 
 export class LineTool {
   viewTool: View
   stashTool: Stash
-  pushedTool: Pushed
   
   constructor(canvas: fabric.Canvas) {
     this.viewTool = new View(canvas, this.viewCommitToStash)
-    this.stashTool = new Stash(canvas, this.stashCommitPushed)
-    this.pushedTool = new Pushed(canvas)
+    this.stashTool = new Stash(canvas)
     this.bindEvent()
   }
 
   bindEvent() {
-    window.addEventListener('keydown', this.keyDown.bind(this))
+    console.log('bindEvent')
+    hotkeys('space', this.changeViewTool.bind(this));
+    hotkeys('escape', this.commit.bind(this));
   }
 
-  keyDown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
+  changeViewTool = () => {
+    console.log('changeViewTool')
+    this.viewTool.isEnabled = true
+  }
+
+  commit = () => {
+    console.log('commit', this.viewTool.linePointer)
+    if (this.viewTool.linePointer.length > 0) {
       this.viewTool.isEnabled = false
+      this.stashTool.commit(this.viewTool.linePointer)
       this.viewTool.remove()
-      this.viewTool.commitLine()
-      this.stashTool.commitLine()
       this.viewTool.reset()
     }
-    if (e.key === ' ') {
-      this.viewTool.isEnabled = true
+  }
+
+  pushToStash = () => {
+    if (this.viewTool.linePointer.length > 0) {
+      this.stashTool.commit(this.viewTool.linePointer)
     }
   }
 
   viewCommitToStash = (line: Array<Pointer>) => {
-    this.stashTool.commit(line)
-  }
-
-  stashCommitPushed = (line: StashPointer) => {
-    this.pushedTool.commit(line)
+    if (line.length > 0) {
+      this.stashTool.commit(line)
+    }
   }
 
   destroy() {
     this.viewTool.destroy()
     this.stashTool.destroy()
-    this.pushedTool.destroy()
   }
 }

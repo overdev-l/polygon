@@ -5,10 +5,8 @@ export class View {
 
    isEnabled = false
    isMouseDown = false
-   viewLine: fabric.Line | null = null
+   viewLine: fabric.Polygon | null = null
 
-   startPointer: Pointer | null = null
-   lastPointer: Pointer | null = null
    endPointer: Pointer | null = null
    linePointer: Array<Pointer> = []
 
@@ -27,31 +25,36 @@ export class View {
 
   reset = () => {
     this.linePointer = []
-    this.lastPointer = null
-    this.startPointer = null
     this.endPointer = null
   }
   
 
   mouseDown(e: fabric.IEvent) {
+    console.log('mouseDown', this.isEnabled)
     if (!this.isEnabled) return
     this.isMouseDown = true
-    if (!this.startPointer) {
-        this.startPointer = this.canvas.getPointer(e.e)
-    }
     this.linePointer.push(this.canvas.getPointer(e.e))
-    this.commitLine()
-    
+    this.render()
   }
 
   mouseMove(e: fabric.IEvent) {
-    if (this.isEnabled) {
-        this.render()
-    }
     this.endPointer = this.canvas.getPointer(e.e)
+    if (this.isEnabled) {
+      this.render()
+    }
     if (!this.isMouseDown) return
-    this.linePointer.push(this.canvas.getPointer(e.e))
-    this.commitLine()
+    // 只有当鼠标移动一定距离后才添加新的点
+    const currentPoint = this.canvas.getPointer(e.e);
+    const lastPoint = this.linePointer[this.linePointer.length - 1];
+    const distance = Math.sqrt(
+      Math.pow(currentPoint.x - lastPoint.x, 2) + 
+      Math.pow(currentPoint.y - lastPoint.y, 2)
+    );
+    
+    // 设置最小距离阈值，只有超过这个距离才添加新点
+    if (distance > 5) {
+      this.linePointer.push(currentPoint);
+    }
   }
 
   mouseUp() {
@@ -65,29 +68,22 @@ export class View {
   }
 
   render() {
-    if (!this.startPointer || !this.endPointer) return
+    if (!this.endPointer) return
     if (this.viewLine) {
       this.canvas.remove(this.viewLine)
     }
-    this.viewLine = new fabric.Line([this.startPointer.x, this.startPointer.y, this.endPointer.x, this.endPointer.y], {
+    this.viewLine = new fabric.Polygon([...this.linePointer, this.endPointer], {
       stroke: 'red',
+      strokeWidth: 2,
       selectable: false,
+      fill: 'transparent',
     })
     this.canvas.add(this.viewLine)
   }
 
 
   commitLine() {
-    if (this.linePointer.length === 2) {
-        this.commit(this.linePointer)
-        const lastPointer = this.linePointer[this.linePointer.length - 1]
-        this.lastPointer = lastPointer
-        this.linePointer = [lastPointer,]
-    } else {
-        if (this.lastPointer && this.startPointer) {
-            this.commit([this.lastPointer, this.startPointer])
-        }
-    }
+    this.commit(this.linePointer)
   }
 
   unbindEvent() {
@@ -99,7 +95,6 @@ export class View {
   destroy() {
     this.unbindEvent()
     this.viewLine = null
-    this.startPointer = null
     this.endPointer = null
   }
 }
