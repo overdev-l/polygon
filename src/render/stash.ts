@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 import { fabric } from 'fabric'
 import { Pointer, StashPointerWithGroup, Theme } from "./types"
 import { getTheme } from './theme'
-import { mouseControlDown, mouseControlMove, mouseControlUp } from './controlMouse/mouse'
+import { mouseMoving } from './controlMouse/mouse'
 
 export class Stash {
   pointers: StashPointerWithGroup = []
@@ -10,9 +10,7 @@ export class Stash {
 
   constructor(private canvas: fabric.Canvas) {
     this.canvas = canvas
-    this.canvas.on('mouse:down', mouseControlDown.bind(this.canvas))
-    this.canvas.on('mouse:up', mouseControlUp.bind(this.canvas))
-    this.canvas.on('mouse:move', mouseControlMove.bind(this.canvas))
+    this.canvas.on('object:moving', mouseMoving.bind(this.canvas))
   }
 
   
@@ -55,7 +53,7 @@ export class Stash {
         radius: theme.color.control.radius,
         fill: theme.color.control.fill,
         stroke: theme.color.control.stroke,
-        selectable: false,
+        hasControls: false,
         originX: 'center',
         originY: 'center',
       })
