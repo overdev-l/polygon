@@ -1,12 +1,13 @@
 import { nanoid } from 'nanoid'
 import { fabric } from 'fabric'
 import { Pointer, StashPointerWithGroup, Theme } from "./types"
-import { getTheme } from './theme'
+import { getPreset, getTheme } from './preset'
 import { mouseMoving } from './controlMouse/mouse'
 
 export class Stash {
   pointers: StashPointerWithGroup = []
   fabricPolygons: fabric.Polygon[] = []
+  fabricPolygonControls: fabric.Circle[] = []
 
   constructor(private canvas: fabric.Canvas) {
     this.canvas = canvas
@@ -22,9 +23,11 @@ export class Stash {
     this.pointers.push({
       polygon: line,
       theme: getTheme(),
-      id: nanoid()
+      id: nanoid(),
+      type: getPreset().type
     })
     this.removeAllPolygon()
+    this.removeAllControl()
     this.render()
   }
 
@@ -36,6 +39,7 @@ export class Stash {
         fill: pointer.theme.color.fill,
         opacity: pointer.theme.color.opacity,
         id: pointer.id,
+        polygonType: pointer.type,
         objectCaching: false,
         selectable: false,
         evented: false
@@ -47,7 +51,7 @@ export class Stash {
   }
   renderControl(pointer: Pointer[], theme: Theme, id: string) {
     pointer.forEach((p, index) => {
-      const fabricPlogonControl = new fabric.Circle({
+      const fabricPolygonControl = new fabric.Circle({
         left: p.x,
         top: p.y,
         radius: theme.color.control.radius,
@@ -57,10 +61,10 @@ export class Stash {
         originX: 'center',
         originY: 'center',
       })
-      fabricPlogonControl.set('polygonId', id)
-      fabricPlogonControl.set('index', index)
-      this.canvas.add(fabricPlogonControl)
-      
+      fabricPolygonControl.set('polygonId', id)
+      fabricPolygonControl.set('index', index)
+      this.canvas.add(fabricPolygonControl)
+      this.fabricPolygonControls.push(fabricPolygonControl)
     })
   }
 
@@ -69,5 +73,12 @@ export class Stash {
       this.canvas.remove(polygon)
     })
     this.fabricPolygons = []
+  }
+
+  removeAllControl() {
+    this.fabricPolygonControls.forEach((control) => {
+      this.canvas.remove(control)
+    })
+    this.fabricPolygonControls = []
   }
 }

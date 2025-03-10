@@ -1,4 +1,4 @@
-import { theme } from "./theme"
+import { theme } from "./preset"
 
 export type Pointer = {
   x: number
@@ -8,6 +8,7 @@ export type StashPointerWithGroup = Array<{
   polygon: Array<Pointer>
   theme: typeof theme,
   id: string
+  type: number
 }>
 
 export type Theme = {
@@ -24,4 +25,8 @@ export type Theme = {
       opacity: number
     }
   }
+}
+
+export type Preset = {
+  type: number
 }
