@@ -1,8 +1,8 @@
 import { nanoid } from 'nanoid'
 import { fabric } from 'fabric'
-import { Pointer, StashPointerWithGroup, Theme } from "./types"
+import { Pointer, StashPointer, StashPointerWithGroup, Theme } from "./types"
 import { getPreset, getTheme } from './preset'
-import { mouseMoving } from './controlMouse/mouse'
+import { mouseMoved, mouseMoving } from './controlMouse/mouse'
 import { polygonUnion } from './utils/polygonUtils'
 
 export class Stash {
@@ -12,17 +12,29 @@ export class Stash {
 
   constructor(private canvas: fabric.Canvas) {
     this.canvas = canvas
-    this.canvas.on('object:moving', mouseMoving.bind(this.canvas))
+    this.canvas.on('object:moving', mouseMoving.bind(this.canvas, this))
+    this.canvas.on('object:modified', mouseMoved.bind(this))
   }
 
-  
+
   destroy() {
     this.pointers = []
   }
 
+  triggerCommit(pointer: StashPointer) {
+    if (!pointer.cover) {
+      polygonUnion.call(this, pointer)
+    } else {
+      this.pointers.push(pointer)
+    }
+    this.removeAllPolygon()
+    this.removeAllControl()
+    this.render()
+  }
+
   commit(line: Array<Pointer>, cover: boolean) {
-    
-    if(!cover) {
+
+    if (!cover) {
       console.log('非覆盖模式：计算多边形布尔交集')
       polygonUnion.call(this, {
         polygon: line,
