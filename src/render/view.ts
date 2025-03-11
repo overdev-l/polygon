@@ -1,15 +1,16 @@
 import { fabric } from 'fabric'
 import { Pointer } from './types'
+import { nanoid } from 'nanoid'
 
 export class View {
 
    isEnabled = false
    isMouseDown = false
    viewLine: fabric.Polygon | null = null
-
+   _cover:boolean = false
+   id: string = nanoid()
    endPointer: Pointer | null = null
    linePointer: Array<Pointer> = []
-   cover: boolean = false
 
    commit: (linePointer: Array<Pointer>) => void
   constructor(private canvas: fabric.Canvas, commit: (linePointer: Array<Pointer>) => void) {
@@ -77,6 +78,12 @@ export class View {
       fill: 'transparent',
     })
     this.canvas.add(this.viewLine)
+  }
+  get cover() {
+    return this._cover
+  }
+  set cover(mode: boolean) {
+    this._cover = mode
   }
 
 

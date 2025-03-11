@@ -33,9 +33,7 @@ export class Stash {
   }
 
   commit(line: Array<Pointer>, cover: boolean) {
-
     if (!cover) {
-      console.log('非覆盖模式：计算多边形布尔交集')
       polygonUnion.call(this, {
         polygon: line,
         theme: getTheme(),

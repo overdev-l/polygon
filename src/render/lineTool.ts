@@ -3,10 +3,12 @@ import { fabric } from "fabric"
 import { View } from "./view"
 import { Stash } from "./stash"
 import { Pointer } from "./types"
+import { nanoid } from 'nanoid';
 
 export class LineTool {
   viewTool: View
   stashTool: Stash
+  id: string = nanoid()
   
   constructor(canvas: fabric.Canvas) {
     this.viewTool = new View(canvas, this.viewCommitToStash)
@@ -43,7 +45,6 @@ export class LineTool {
    * 如果不为覆盖模式，在完成绘制后，需要计算多边形交集进行布尔运算
    */
   changeCoverMode = (isCover: boolean) => {
-    console.log('切换覆盖模式', isCover)
     this.viewTool.cover = isCover
   }
 
