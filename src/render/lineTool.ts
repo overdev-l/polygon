@@ -15,37 +15,37 @@ export class LineTool {
   }
 
   bindEvent() {
-    console.log('bindEvent')
     hotkeys('space', this.changeViewTool.bind(this));
     hotkeys('escape', this.commit.bind(this));
   }
 
   changeViewTool = () => {
-    console.log('changeViewTool')
     this.viewTool.isEnabled = true
   }
 
   commit = () => {
-    console.log('commit', this.viewTool.linePointer)
     if (this.viewTool.linePointer.length > 0) {
       this.viewTool.isEnabled = false
-      this.stashTool.commit(this.viewTool.linePointer)
+      this.stashTool.commit(this.viewTool.linePointer, this.viewTool.cover)
       this.viewTool.remove()
       this.viewTool.reset()
     }
   }
 
-  pushToStash = () => {
-    if (this.viewTool.linePointer.length > 0) {
-      this.stashTool.commit(this.viewTool.linePointer)
-    }
-  }
-
   viewCommitToStash = (line: Array<Pointer>) => {
     if (line.length > 0) {
-      this.stashTool.commit(line)
+      this.stashTool.commit(line, this.viewTool.cover)
     }
   }
+  /**
+   * 切换覆盖模式
+   * @param isCover 是否为覆盖模式
+   * 如果不为覆盖模式，在完成绘制后，需要计算多边形交集进行布尔运算
+   */
+  changeCoverMode = (isCover: boolean) => {
+    this.viewTool.cover = isCover
+  }
+
 
   destroy() {
     this.viewTool.destroy()

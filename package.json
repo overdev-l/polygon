@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.11",
     "@types/fabric": "^5.3.10",
+    "@velipso/polybool": "^2.0.11",
     "fabric": "5.2.1",
     "hotkeys-js": "^3.13.9",
     "nanoid": "^5.1.3",

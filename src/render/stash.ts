@@ -3,6 +3,7 @@ import { fabric } from 'fabric'
 import { Pointer, StashPointerWithGroup, Theme } from "./types"
 import { getPreset, getTheme } from './preset'
 import { mouseMoving } from './controlMouse/mouse'
+import { polygonUnion } from './utils/polygonUtils'
 
 export class Stash {
   pointers: StashPointerWithGroup = []
@@ -19,13 +20,26 @@ export class Stash {
     this.pointers = []
   }
 
-  commit(line: Array<Pointer>) {
-    this.pointers.push({
-      polygon: line,
-      theme: getTheme(),
-      id: nanoid(),
-      type: getPreset().type
-    })
+  commit(line: Array<Pointer>, cover: boolean) {
+    
+    if(!cover) {
+      console.log('非覆盖模式：计算多边形布尔交集')
+      polygonUnion.call(this, {
+        polygon: line,
+        theme: getTheme(),
+        id: nanoid(),
+        type: getPreset().type,
+        cover
+      })
+    } else {
+      this.pointers.push({
+        polygon: line,
+        theme: getTheme(),
+        id: nanoid(),
+        type: getPreset().type,
+        cover
+      })
+    }
     this.removeAllPolygon()
     this.removeAllControl()
     this.render()
@@ -58,6 +72,7 @@ export class Stash {
         fill: theme.color.control.fill,
         stroke: theme.color.control.stroke,
         hasControls: false,
+        hasBorders: false,
         originX: 'center',
         originY: 'center',
       })

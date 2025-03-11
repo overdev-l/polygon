@@ -4,12 +4,14 @@ export type Pointer = {
   x: number
   y: number
 }
-export type StashPointerWithGroup = Array<{
-  polygon: Array<Pointer>
-  theme: typeof theme,
+export type StashPointer = {
+  polygon: Array<Pointer> 
+  theme: typeof theme
   id: string
   type: number
-}>
+  cover: boolean
+}
+export type StashPointerWithGroup = Array<StashPointer>
 
 export type Theme = {
   color: {

@@ -22,4 +22,8 @@ export const useRender = (id: string) => {
       tool.current?.destroy()
     }
   }, [init])
+
+  return {
+    tool: tool.current,
+  }
 }

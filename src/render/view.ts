@@ -9,6 +9,7 @@ export class View {
 
    endPointer: Pointer | null = null
    linePointer: Array<Pointer> = []
+   cover: boolean = false
 
    commit: (linePointer: Array<Pointer>) => void
   constructor(private canvas: fabric.Canvas, commit: (linePointer: Array<Pointer>) => void) {
@@ -30,7 +31,6 @@ export class View {
   
 
   mouseDown(e: fabric.IEvent) {
-    console.log('mouseDown', this.isEnabled)
     if (!this.isEnabled) return
     this.isMouseDown = true
     this.linePointer.push(this.canvas.getPointer(e.e))
@@ -43,7 +43,6 @@ export class View {
       this.render()
     }
     if (!this.isMouseDown) return
-    // 只有当鼠标移动一定距离后才添加新的点
     const currentPoint = this.canvas.getPointer(e.e);
     const lastPoint = this.linePointer[this.linePointer.length - 1];
     const distance = Math.sqrt(
@@ -51,7 +50,6 @@ export class View {
       Math.pow(currentPoint.y - lastPoint.y, 2)
     );
     
-    // 设置最小距离阈值，只有超过这个距离才添加新点
     if (distance > 5) {
       this.linePointer.push(currentPoint);
     }
