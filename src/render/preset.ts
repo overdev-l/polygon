@@ -1,4 +1,4 @@
-import { Preset, Theme } from "./types"
+import { ControlTheme, Preset, Theme } from "./types"
 
 export const theme: Theme = {
   color: {
@@ -14,6 +14,14 @@ export const theme: Theme = {
       opacity: 0.5,
     },
   },
+}
+
+export const lightControlTheme: ControlTheme = {
+  fill: '#DB4520',
+  stroke: '#DB4520',
+  strokeWidth: 2,
+  radius: 5,
+  opacity: 0.5,
 }
 
 export const preset = {
@@ -34,4 +42,12 @@ export const setTheme = (newTheme: Theme) => {
 
 export const getTheme = () => {
   return JSON.parse(JSON.stringify(theme))
+}
+
+export const setLightControlTheme = (newLightControlTheme: ControlTheme) => {
+  Object.assign(lightControlTheme, newLightControlTheme)
+}
+
+export const getLightControlTheme = () => {
+  return JSON.parse(JSON.stringify(lightControlTheme))
 }

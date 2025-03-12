@@ -10,8 +10,21 @@ export type StashPointer = {
   id: string
   type: number
   cover: boolean
+  hidePolygon: boolean
+  hideControl: boolean
+  highlightControl: boolean
+  lockControl: boolean
+  lightControlTheme: ControlTheme
 }
 export type StashPointerWithGroup = Array<StashPointer>
+
+export type ControlTheme = {
+  fill: string
+  stroke: string
+  strokeWidth: number
+  radius: number
+  opacity: number
+}
 
 export type Theme = {
   color: {
@@ -19,13 +32,7 @@ export type Theme = {
     stroke: string
     strokeWidth: number
     opacity: number
-    control: {
-      fill: string
-      stroke: string
-      strokeWidth: number
-      radius: number
-      opacity: number
-    }
+    control: ControlTheme
   }
 }
 

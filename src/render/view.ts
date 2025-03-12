@@ -1,6 +1,5 @@
 import { fabric } from 'fabric'
 import { Pointer } from './types'
-import { nanoid } from 'nanoid'
 
 export class View {
 
@@ -8,7 +7,6 @@ export class View {
    isMouseDown = false
    viewLine: fabric.Polygon | null = null
    _cover:boolean = false
-   id: string = nanoid()
    endPointer: Pointer | null = null
    linePointer: Array<Pointer> = []
 

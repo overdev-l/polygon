@@ -3,12 +3,10 @@ import { fabric } from "fabric"
 import { View } from "./view"
 import { Stash } from "./stash"
 import { Pointer } from "./types"
-import { nanoid } from 'nanoid';
 
 export class LineTool {
   viewTool: View
   stashTool: Stash
-  id: string = nanoid()
   
   constructor(canvas: fabric.Canvas) {
     this.viewTool = new View(canvas, this.viewCommitToStash)
@@ -46,6 +44,57 @@ export class LineTool {
    */
   changeCoverMode = (isCover: boolean) => {
     this.viewTool.cover = isCover
+  }
+  /**
+   * 删除多边形
+   * @param ids 多边形id
+   */
+  removePolygon = (...ids: string[]) => {
+    this.stashTool.removePolygon(ids)
+  }
+  /**
+   * 隐藏多边形
+   * @param ids 多边形id
+   */
+  hidePolygon = (...ids: string[]) => {
+    this.stashTool.hidePolygon(ids)
+  }
+  /**
+   * 展示多边形
+   * @param ids 多边形id
+   */
+  showPolygon = (...ids: string[]) => {
+    this.stashTool.showPolygon(ids)
+  }
+  /**
+   * 隐藏控制点
+   * @param ids 控制点id
+   */
+  hideControl = (...ids: string[]) => {
+    this.stashTool.hideControl(ids)
+  }
+  /**
+   * 展示控制点
+   * @param ids 控制点id
+   */
+  showControl = (...ids: string[]) => {
+    this.stashTool.showControl(ids)
+  }
+
+  lockControl = (...ids: string[]) => {
+    this.stashTool.lockControl(ids)
+  }
+
+  unlockControl = (...ids: string[]) => {
+    this.stashTool.unlockControl(ids)
+  }
+
+  highlightControl = (...ids: string[]) => {
+    this.stashTool.highlightControl(ids)
+  }
+
+  unhighlightControl = (...ids: string[]) => {
+    this.stashTool.unhighlightControl(ids)
   }
 
 
