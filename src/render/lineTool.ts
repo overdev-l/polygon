@@ -7,7 +7,7 @@ import { Pointer } from "./types"
 export class LineTool {
   viewTool: View
   stashTool: Stash
-  
+  isClip = false
   constructor(canvas: fabric.Canvas) {
     this.viewTool = new View(canvas, this.viewCommitToStash)
     this.stashTool = new Stash(canvas)
@@ -17,9 +17,12 @@ export class LineTool {
   bindEvent() {
     hotkeys('space', this.commit.bind(this));
   }
-
-  changeViewTool = () => {
-    this.viewTool.isEnabled = true
+  /**
+   * 切换裁剪模式
+   */
+  changeIsClip = () => {
+    this.isClip = !this.isClip
+    console.log('isClip', this.isClip)
   }
 
   openMask = () => {
@@ -28,10 +31,16 @@ export class LineTool {
 
   commit = () => {
     if (this.viewTool.linePointer.length > 0) {
-      this.viewTool.isEnabled = false
-      this.stashTool.commit(this.viewTool.linePointer, this.viewTool.cover)
-      this.viewTool.remove()
-      this.viewTool.reset()
+      if (!this.isClip) {
+        this.viewTool.isEnabled = false
+        this.stashTool.commit(this.viewTool.linePointer, this.viewTool.cover)
+        this.viewTool.remove()
+        this.viewTool.reset()
+      } else {
+        this.stashTool.clip(this.viewTool.linePointer)
+        this.viewTool.remove()
+        this.viewTool.reset()
+      }
     }
   }
 

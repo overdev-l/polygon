@@ -3,7 +3,7 @@ import { fabric } from 'fabric'
 import { Pointer, StashPointer, StashPointerWithGroup, Theme } from "./types"
 import { getLightControlTheme, getPreset, getTheme } from './preset'
 import { mouseMoved, mouseMoving } from './controlMouse/mouse'
-import { polygonUnion } from './utils/polygonUtils'
+import { clipAllPolygon, polygonUnion } from './utils/polygonUtils'
 
 export class Stash {
   pointers: StashPointerWithGroup = []
@@ -62,6 +62,16 @@ export class Stash {
         lightControlTheme: getLightControlTheme()
       })
     }
+    this.removeAllPolygon()
+    this.removeAllControl()
+    this.render()
+  }
+  /**
+   * 裁剪所有多边形
+   * @param line 
+   */
+  clip(line: Array<Pointer>) {
+    clipAllPolygon.call(this, line)
     this.removeAllPolygon()
     this.removeAllControl()
     this.render()

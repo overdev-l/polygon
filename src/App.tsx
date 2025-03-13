@@ -8,6 +8,7 @@ function App() {
   const toolRef = useRef<LineTool | null>(null)
   const canvasRef = useRef<fabric.Canvas | null>(null)
   const [coverMode, setCoverMode] = useState<boolean>(false)
+  const [isClip, setIsClip] = useState<boolean>(false)
   const setThemeHandler = (type: number) => {
     setTheme(themePreset[type])
     setPreset({ type })
@@ -50,7 +51,12 @@ function App() {
             if (!toolRef.current) return
             toolRef.current.openMask()
           }}>开启绘制</Button>
-          <Button  onClick={() => {}}>裁剪</Button>
+          <Button  onClick={() => {
+            if (!toolRef.current) return
+            const isClip = toolRef.current.isClip
+            toolRef.current.changeIsClip()
+            setIsClip(!isClip)
+          }}>{isClip ? '关闭裁剪' : '开启裁剪'}</Button>
         </div>
         <div className='flex gap-4'>
           <Button  onClick={() => { toolRef.current?.hidePolygon()  }}>隐藏全部Polygon</Button>
