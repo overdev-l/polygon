@@ -46,6 +46,10 @@ function App() {
             toolRef.current.changeCoverMode(!coverMode)
             setCoverMode(!coverMode)
           }}>{coverMode ? '覆盖模式' : '非覆盖模式'}</Button>
+          <Button  onClick={() => {
+            if (!toolRef.current) return
+            toolRef.current.openMask()
+          }}>开启绘制</Button>
           <Button  onClick={() => {}}>裁剪</Button>
         </div>
         <div className='flex gap-4'>

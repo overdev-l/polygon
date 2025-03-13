@@ -2,16 +2,16 @@ import { ControlTheme, Preset, Theme } from "./types"
 
 export const theme: Theme = {
   color: {
-    fill: '#b5e48c',
-    stroke: '#b5e48c',
+    fill: 'rgba(181,228,140,0.2)',
+    stroke: 'rgba(181,228,140,0.5)',
     strokeWidth: 2,
-    opacity: 0.5,
+    opacity: 1,
     control: {
-      fill: '#99d98c',
-      stroke: '#99d98c',
+      fill: 'rgba(153,217,140,1)',
+      stroke: 'rgba(153,217,140,1)',
       strokeWidth: 2,
       radius: 5,
-      opacity: 0.5,
+      opacity: 1,
     },
   },
 }

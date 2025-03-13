@@ -15,11 +15,14 @@ export class LineTool {
   }
 
   bindEvent() {
-    hotkeys('space', this.changeViewTool.bind(this));
-    hotkeys('escape', this.commit.bind(this));
+    hotkeys('space', this.commit.bind(this));
   }
 
   changeViewTool = () => {
+    this.viewTool.isEnabled = true
+  }
+
+  openMask = () => {
     this.viewTool.isEnabled = true
   }
 
